@@ -11,13 +11,13 @@ Include:
 Call with jQuery:
 ```javascript
 $(function () {
-    lp.fn.setUTM();
+    bo.fn.setUTM();
 });
 ```
 
 Call with plain JavaScript:
 ```javascript
-lp.fn.setUTM();
+bo.fn.setUTM();
 ```
 
 ## Author
