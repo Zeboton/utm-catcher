@@ -25,18 +25,24 @@ bo.fn.getCookie = function (cname) {
     return "";
 };
 
-bo.fn.setUTM = function () {
-    const cname = "utm_cookies";
-    let utm = JSON.parse(decodeURIComponent(bo.fn.getCookie(cname) || "%7B%7D"));
-    let i, u, p, b = /^utm/;
+bo.fn.findNeededParams = function(cname, searchParamRegExp){
+    let dataForCookies = {};
+    let i, u, p, b = searchParamRegExp;
     let us = location.search.replace(/&amp;/g, '&').split(/[?&]/);
     for (i in us) {
         u = decodeURIComponent(us[i]);
         if (!u || !b.test(u)) continue;
         p = u.split(/=/);
-        utm[p[0]] = p[1];
+        dataForCookies[p[0]] = p[1];
     }
-    bo.fn.setCookie(cname, encodeURIComponent(JSON.stringify(utm)), 31);
+    if (Object.keys(dataForCookies).length === 0 && dataForCookies.constructor === Object){
+        dataForCookies = JSON.parse(decodeURIComponent(bo.fn.getCookie(cname) || "%7B%7D"));;
+    }
+    bo.fn.setCookie(cname, encodeURIComponent(JSON.stringify(dataForCookies)), 31);
+}
+
+bo.fn.setUTM = function () {
+    bo.fn.findNeededParams("utm_cookies", /^utm/);
 };
 
 
